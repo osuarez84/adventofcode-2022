@@ -87,10 +87,4 @@ func main() {
 	}
 
 	fmt.Println("The total number of pairs that overlap is: ", cont)
-
-
-
-	// we need to check if on interval is contained inside the other one
-	// TODO
-
 }
