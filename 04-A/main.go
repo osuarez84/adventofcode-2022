@@ -59,14 +59,11 @@ func isContained(ids []string) (bool, error) {
 
 	if firstCipherFirstIds <= firstCipherSecondIds && secondCipherFirstIds >= secondCipherSecondIds {
 		isContained = true
-		return isContained, nil
 	} else if firstCipherSecondIds <= firstCipherFirstIds && secondCipherSecondIds >= secondCipherFirstIds {
 		isContained = true
-		return isContained, nil
-	} else {
-		return isContained, nil
-	}
+	} 
 
+	return isContained, nil
 }
 
 
@@ -84,7 +81,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		
+
 		if contains {
 			fmt.Println("This range is containted!")
 			cont += 1
