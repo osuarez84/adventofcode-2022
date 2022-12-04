@@ -38,33 +38,33 @@ func getCiphersFromIds(ids string) (int, int, error) {
 }
 
 
-func isContained(ids []string) bool {
+func isContained(ids []string) (bool, error) {
 	isContained := false
 	firstIds := ids[0]
 	secondIds := ids[1]
 
 	firstCipherFirstIds, secondCipherFirstIds, err := getCiphersFromIds(firstIds)
 	if err != nil {
-		panic(err)
+		return isContained, err
 	}
 	fmt.Println("Ciphers from first ID: ", firstCipherFirstIds, secondCipherFirstIds)
 
 
 	firstCipherSecondIds, secondCipherSecondIds, err := getCiphersFromIds(secondIds)
 	if err != nil {
-		panic(err)
+		return isContained, err
 	}
 	fmt.Println("Ciphers from second ID: ", firstCipherSecondIds, secondCipherSecondIds)
 
 
 	if firstCipherFirstIds <= firstCipherSecondIds && secondCipherFirstIds >= secondCipherSecondIds {
 		isContained = true
-		return isContained
+		return isContained, nil
 	} else if firstCipherSecondIds <= firstCipherFirstIds && secondCipherSecondIds >= secondCipherFirstIds {
 		isContained = true
-		return isContained
+		return isContained, nil
 	} else {
-		return isContained
+		return isContained, nil
 	}
 
 }
@@ -80,7 +80,12 @@ func main() {
 	for lines.Scan() {
 		tmp := strings.Split(lines.Text(), ",")
 		fmt.Println(tmp)
-		if contains := isContained(tmp); contains {
+		contains, err := isContained(tmp)
+		if err != nil {
+			panic(err)
+		}
+		
+		if contains {
 			fmt.Println("This range is containted!")
 			cont += 1
 		}
