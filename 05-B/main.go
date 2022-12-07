@@ -12,19 +12,6 @@ import (
 )
 
 
-const (
-	stack1 = "SPWNJZ"
-	stack2 = "TSG"
-	stack3 = "HLRQV"
-	stack4 = "DTSV"
-	stack5 = "JMBDTZQ"
-	stack6 = "LZCDJTWM"
-	stack7 = "JTGWMPL"
-	stack8 = "HQFBTMGN"
-	stack9 = "WQBPCGDR"
-)
-
-
 func createTheStacks() []*lls.Stack {
 	initStacks := []string{
 		"ZJNWPS",
