@@ -9,12 +9,7 @@ import (
 	"strings"
 )
 
-// get input to a 2D slice
 
-// iterate over every tree and check all the possibilities up, down, left, right
-
-// it will be visible when at least one direction is free
-// we can break once we find one
 func getInputLines(name string) (*bufio.Scanner, error) {
 	readFile, err := os.Open("input.txt")
 	if err != nil {
