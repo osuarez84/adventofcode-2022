@@ -69,10 +69,10 @@ func getAdjacencyList(l [][]int) []quadrant {
 	for i := 0; i < lengthRow; i++ {
 		for j := 0; j < lengthCol; j++ {
 			// get all the possible adjacents
-			right = ((i * (lengthCol - 1)) + j) + 1              // TODO
-			left = ((i * (lengthCol - 1)) + j) - 1               // TODO
-			down = ((i * (lengthCol - 1)) + j) + (lengthCol - 1) // TODO
-			up = ((i * (lengthCol - 1)) + j) - (lengthCol - 1)   // TODO
+			right = ((i * (lengthCol)) + j) + 1          // TODO
+			left = ((i * (lengthCol)) + j) - 1           // TODO
+			down = ((i * (lengthCol)) + j) + (lengthCol) // TODO
+			up = ((i * (lengthCol)) + j) - (lengthCol)   // TODO
 
 			// re evaluate neighbors when positions is last col or last row or if diff heights are more than 1
 			if j == 0 {
@@ -109,7 +109,7 @@ func getAdjacencyList(l [][]int) []quadrant {
 				neighbors: []int{up, down, left, right},
 				marked:    false,
 				edgeTo:    9999,
-				index:     ((i * lengthCol) - 1) + j,
+				index:     (i * lengthCol) + j,
 			}
 
 			// add to the adjacency list
@@ -120,9 +120,10 @@ func getAdjacencyList(l [][]int) []quadrant {
 	return adjList
 }
 
-func computeShortestPath(adjList []quadrant) {
+func computeShortestPath(adjList []quadrant) int {
 	var queueQuadrants []int
 	startIndex := ((20 * (101)) + 0) // TODO
+	finalIndex := ((20 * (101)) + 77)
 	fmt.Println("Start index is: ", adjList[startIndex])
 
 	// queue the first neighbors
@@ -140,23 +141,38 @@ func computeShortestPath(adjList []quadrant) {
 			break
 		}
 
+		fmt.Println("The queue contains the points: ", queueQuadrants)
+
 		// get first neighbor in the queue
 		pop := queueQuadrants[0]
 		queueQuadrants = queueQuadrants[1:]
+		if adjList[pop].marked {
+			continue
+		}
+
+		adjList[pop].marked = true
+		fmt.Println("Get the point from the queue: ", pop)
 
 		// introduce the new neighbors
 		for _, i := range adjList[pop].neighbors {
-			if i != 9999 && adjList[i].marked == false {
+			if i != 9999 {
 				queueQuadrants = append(queueQuadrants, i)
-				adjList[i].marked = true
-				adjList[i].edgeTo = countSteps
+				// adjList[i].marked = true
+				adjList[i].edgeTo = pop
+				fmt.Println("New values for the neighbors from the point in the queue: ", adjList[i])
+				fmt.Println("Add new neighbor points to the queue: ", adjList[pop].neighbors)
 			}
-
 		}
 
-		countSteps++
+		if !adjList[finalIndex].marked {
+			countSteps++
+		} else {
+			break
+		}
 
 	}
+
+	return countSteps
 }
 
 func main() {
@@ -175,7 +191,6 @@ func main() {
 		}
 		initArray = append(initArray, tmpSlice)
 	}
-	fmt.Println(initArray)
 
 	// prepare the adjacency list
 	adjacencyList := getAdjacencyList(initArray)
@@ -201,8 +216,7 @@ func main() {
 	}
 
 	// start computing the shortest path
-	computeShortestPath(adjacencyList)
-	fmt.Println("Final adjacency list: ", adjacencyList)
+	numberOfSteps := computeShortestPath(adjacencyList)
 	file, err = os.Create("final_adjacency_list.txt")
 	if err != nil {
 		log.Fatal("Cannot create file", err)
@@ -213,7 +227,6 @@ func main() {
 		fmt.Fprintln(file, row)
 	}
 
-	finalIndex := ((20 * (101)) + 77) // TODO
-	fmt.Println("Final point from adjacency list: ", adjacencyList[finalIndex])
+	fmt.Println("Final point from adjacency list: ", numberOfSteps)
 
 }
